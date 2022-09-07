@@ -2,14 +2,16 @@ const startDaemon = require("start-ipfs-daemon");
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const exec = require("child_process").execSync;
+const util = require("util");
+const { exec } = require("child_process");
+const execProm = util.promisify(exec);
 const fs = require("fs");
 
 app.use(cors());
 
-app.use(express.json());
+var ghash;
 
-let hash = "";
+app.use(express.json());
 
 async function IPFSstart() {
   const daemon = await startDaemon({
@@ -18,37 +20,42 @@ async function IPFSstart() {
     stdout: process.stdout,
     stderr: process.stderr,
   });
+  console.log("********************************Started the Server***************************\n")
 }
 
-function uploadJSONToIPFS(filename, jsondata, isneeded) {
-    fs.writeFile(filename+ ".json", JSON.stringify(jsondata), (err) => {
+async function uploadJSONToIPFS(filename, jsondata) {
+    fs.writeFile("./jsons/"+filename+ ".json", JSON.stringify(jsondata), (err) => {
         if (err) throw err;
     
-        console.log("Done writing"); // Success
+        console.log("\nDone writing"); // Success
       });
       try{
-        const data = exec("ipfs add "+filename + ".json --quiet")
-        return data;
+        const hash = await execProm("ipfs add "+"./jsons/"+filename + ".json --quiet")
+        console.log("****************************Uploading File"+filename+".json"+"**************************")
+        console.log("\nHash Code is:"+hash);
+        console.log("*******************************************************************************************\n\n")
+        return hash;
       }catch(err)
       {
         console.log(err)
       }
 }
 
-async function getJSONFile() {
-  exec(
-    "ipfs",
-    ["cat", "QmaMsVHrwrrs3V3NaUfw69bZPBuCuNGCpuB5mddmcQ1Gxp"],
-    async function (err, data) {
-      console.log(err, data);
-    }
-  );
+async function getJsonData(hash) {
+  const data = await execProm("ipfs cat "+hash)
+  return JSON.parse(data.stdout);
 }
 
 app.get("/upload/uploadJson", async (req, res, next) => {
-    const hash = uploadJSONToIPFS(req.body.name, req.body.data, req.body.isneeded)
-    res.send({ ipfsHash: hash.toString()});
+    let hash = await uploadJSONToIPFS(req.body.name, req.body.data)
+    res.send({ ipfsHash: hash});
     next();
+});
+
+app.get("/get/getJson", async (req, res, next) => {
+  let data = await getJsonData(req.body.hash)
+  res.send({ data: data});
+  next();
 });
 
 const port = 4000;
@@ -56,4 +63,5 @@ const port = 4000;
 app.listen(port, () => {
   console.log(`server is UP at ${port}`);
   IPFSstart();
+  console.log("********************************Started the Server***************************")
 });
