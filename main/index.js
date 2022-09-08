@@ -6,15 +6,24 @@ const util = require("util");
 const { exec } = require("child_process");
 const execProm = util.promisify(exec);
 const fs = require("fs");
-const multer = require("multer")
+const multer = require("multer");
+const path = require("path");
 
 app.use(cors());
 
 app.use(express.json());
 
-const upload = multer({
-  dest:'./upload/files'
+const storage = multer.diskStorage({
+  destination:(req,file,cb)=>{
+    cb(null, "upload/files")
+  },
+  filename:(req, file, cb)=>{
+    console.log(file)
+    let nameFile = Date.now()+path.extname(file.originalname);
+    cb(null, nameFile)
+  }
 })
+const upload = multer({ storage: storage })
 
 async function IPFSstart() {
   const daemon = await startDaemon({
