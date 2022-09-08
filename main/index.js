@@ -6,12 +6,15 @@ const util = require("util");
 const { exec } = require("child_process");
 const execProm = util.promisify(exec);
 const fs = require("fs");
+const multer = require("multer")
 
 app.use(cors());
 
-var ghash;
-
 app.use(express.json());
+
+const upload = multer({
+  dest:'./upload/files'
+})
 
 async function IPFSstart() {
   const daemon = await startDaemon({
@@ -50,6 +53,12 @@ app.get("/upload/uploadJson", async (req, res, next) => {
     let hash = await uploadJSONToIPFS(req.body.name, req.body.data)
     res.send({ ipfsHash: hash});
     next();
+});
+
+app.post("/upload/uploadFile", upload.single('file'), async (req, res, next) => {
+  console.log(req.file);
+  res.send({data:"Hello"})
+  next();
 });
 
 app.get("/get/getJson", async (req, res, next) => {
