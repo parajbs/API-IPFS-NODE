@@ -47,26 +47,29 @@ To run this application, you'll need [Git](https://git-scm.com) and [Node.js](ht
 WINDOWS:
 ```bash
 # Clone this repository
-$ git clone 
+$ git clone https://github.com/Pr0fe5s0r/API-IPFS-NODE
 
-# Go into the repository
-$ cd electron-markdownify
+# Go into the API-IPFS-NODE repository
+$ cd API-IPFS-NODE
 
-# Install dependencies
-$ npm install
+# Go into the windows/main
+$ cd windows/main
 
-# Run the app
-$ npm start
+# Generate API Keys
+$ node index.js --genApiAlone
+
+# Start the server
+$ node index.js
 ```
 
 > **Note**
-> If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
+> Soon linux version of Cloud IPFS will be uploaded!!
 
+# Donate:
 
-## Download
-
-You can [download](https://github.com/amitmerchant1990/electron-markdownify/releases/tag/v1.2.0) the latest installable version of Markdownify for Windows, macOS and Linux.
-
-## Related
-
-[markdownify-web](https://github.com/amitmerchant1990/markdownify-web) - Web version of Markdownify
+<script
+  type="text/javascript"
+  src="https://cdn.rawgit.com/eth-button/eth-button/09673e85d517452e18a5248b96115bc552a0ac01/dist/eth-button.js"
+  data-address="{YOUR ETHEREUM ADDRESS}"
+  data-meta="eth-button">
+</script>
