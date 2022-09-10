@@ -67,9 +67,4 @@ $ node index.js
 
 # Donate:
 
-<script
-  type="text/javascript"
-  src="https://cdn.rawgit.com/eth-button/eth-button/09673e85d517452e18a5248b96115bc552a0ac01/dist/eth-button.js"
-  data-address="{YOUR ETHEREUM ADDRESS}"
-  data-meta="eth-button">
-</script>
+* [ethereum.png](https://cryptocurrencyliveprices.com/coin.php?id=ethereum "Ethereum (ETH)") ![Ethereum](https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/16/ethereum.png "Ethereum (ETH)")
