@@ -42,6 +42,10 @@ async function IPFSstart() {
     stderr: process.stderr,
   });
   console.log("********************************Started the Server***************************\n")
+  
+  if(apikey.PUBLICKEY == "DEFAULT" || apikey.PRIVATEKEY == "DEFAULT123" ){
+    console.log("**Running in Default Key. Please change by command: node index.js --genApiAlone")
+  }
 }
 
 async function uploadJSONToIPFS(filename, jsondata) {
