@@ -67,4 +67,4 @@ $ node index.js
 
 # Donate:
 
-* [ethereum.png](https://cryptocurrencyliveprices.com/coin.php?id=ethereum "Ethereum (ETH)") ![Ethereum](https://raw.githubusercontent.com/ErikThiart/cryptocurrency-icons/master/16/ethereum.png "Ethereum (ETH)")
+![Ethereum Address](images/wallet.png)
