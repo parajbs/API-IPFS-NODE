@@ -48,7 +48,7 @@ async function IPFSstart() {
   }
 
   console.log("Your Public Key  :"+apikey.PUBLICKEY)
-  console.log("Your Private Key :"+apikey.privatekey)
+  console.log("Your Private Key :"+apikey.PRIVATEKEY)
   console.log("\n*******************************************************************************************\n")
 }
 
