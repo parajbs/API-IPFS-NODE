@@ -141,6 +141,12 @@ app.get("/get/getJson", async (req, res, next) => {
 
 app.listen(port, () => {
 
+  if(apikey.PUBLICKEY == "" || apikey.PRIVATEKEY == "")
+  {
+    console.log("Please generate API key using command: node index.js --genApiAlone");
+    exit();
+  }
+
   var arguments = process.argv;
 
   if(arguments[2] == "--genApiAlone")
