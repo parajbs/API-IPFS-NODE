@@ -67,4 +67,6 @@ $ node index.js
 
 # Donate:
 
+ETHEREUM ADDRESS: 0xD4E4cbd23a0D2a4B4E4a23bb5CbED205d72f67EC
+
 ![Ethereum Address](images/wallet.png)
