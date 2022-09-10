@@ -139,38 +139,41 @@ app.get("/get/getJson", async (req, res, next) => {
   next();
 });
 
-app.listen(port, () => {
 
-  if(apikey.PUBLICKEY == "" || apikey.PRIVATEKEY == "" || fs.read('apikey.json').length === 0)
-  {
-    console.log("Please generate API key using command: node index.js --genApiAlone");
-    exit();
+function generateAPIKEY(){
+  let publickey = generateApiKey({ method: 'bytes' });
+  let privatekey = generateApiKey({ method: 'base32', dashes: false });
+
+  let jsondata = {
+    PUBLICKEY: publickey,
+    PRIVATEKEY: privatekey
   }
+
+  fs.writeFile("apikey.json", JSON.stringify(jsondata), (err) => {
+    if (err) throw err;
+    console.log("Generating Keys and storing for future cases.....!")
+    console.log("\n\nYour Public Key is   : "+publickey);
+    console.log("Your Private Key is  : "+privatekey);
+
+    console.log("\n **NOTE: Please use both public and private key to communicate with IPFS cloud node. Don't share are leak your API key's.\n\n View it inside apikey.json\n\n Have a Great Day!\n\n Next Run Command: node index.js or yarn index.js")
+    exit();
+  });
+}
+
+app.listen(port, () => {
 
   var arguments = process.argv;
 
   if(arguments[2] == "--genApiAlone")
   {
-    clear();
-    let publickey = generateApiKey({ method: 'bytes' });
-    let privatekey = generateApiKey({ method: 'base32', dashes: false });
-
-    let jsondata = {
-      PUBLICKEY: publickey,
-      PRIVATEKEY: privatekey
-    }
-
-    fs.writeFile("apikey.json", JSON.stringify(jsondata), (err) => {
-      if (err) throw err;
-      console.log("Generating Keys and storing for future cases.....!")
-      console.log("\n\nYour Public Key is   : "+publickey);
-      console.log("Your Private Key is  : "+privatekey);
-
-      console.log("\n**NOTE: Please use both public and private key to communicate with IPFS cloud node. Don't share are leak your API key's\n\n\n Have a Great Day!")
-      exit();
-    });
+    generateAPIKEY();
   }
-  else{
+
+  if(apikey.PUBLICKEY == null || apikey.PRIVATEKEY == null || fs.statSync('./apikey.json').size == 0)
+  {
+    generateAPIKEY();
+  }else
+  {
     console.log(`server is UP at ${port}`);
     IPFSstart();
     console.log("********************************Started the Server***************************")
