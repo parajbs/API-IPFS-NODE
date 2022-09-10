@@ -148,7 +148,7 @@ function generateAPIKEY(){
     PUBLICKEY: publickey,
     PRIVATEKEY: privatekey
   }
-
+  fs.unlinkSync("apikey.json");
   fs.writeFile("apikey.json", JSON.stringify(jsondata), (err) => {
     if (err) throw err;
     console.log("Generating Keys and storing for future cases.....!")
