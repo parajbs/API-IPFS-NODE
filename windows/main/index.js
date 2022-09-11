@@ -90,7 +90,24 @@ function checkAuth(pubkey, privkey){
   }
 }
 
-function bannerconsole(filename, hash){
+async function PinToLocalIPFS(hash){
+  try{
+    const finhash = await execProm("ipfs pin add "+hash)
+    return true;
+  }catch(err){
+    return false;
+  }
+}
+
+async function removePinIPFS(hash){
+  try{
+    const finhash = await execProm("ipfs pin rm "+hash)
+    return false;
+  }catch(err){
+    return true;
+  }
+}
+function bannerconsole(filename, hash, pinned){
   console.log("****************************Uploading File "+filename+" To IPFS**************************\n")
   console.log("\nFile Name: "+filename);
   console.log("IPFS Hash: "+hash)
@@ -113,7 +130,14 @@ app.post("/upload/uploadJson", async (req, res, next) => {
   {
     let hash = await uploadJSONToIPFS(req.body.name, req.body.data)
     const finalHash = hash.slice(0, -1);
-    res.send({ipfsHash:finalHash, url:"https://ipfs.io/ipfs/"+finalHash})
+    if(req.body.pin == true)
+    {
+      let pinned = await PinToLocalIPFS(finalHash)
+      res.send({ipfsHash:finalHash, url:"https://ipfs.io/ipfs/"+finalHash, pin: pinned})
+    }else{
+      let nonpined = await removePinIPFS(finalHash);
+      res.send({ipfsHash:finalHash, url:"https://ipfs.io/ipfs/"+finalHash, pin: nonpined})
+    }
   }else{
     res.send({error: "Wrong Private Key. Please check your Keys Set!"})
   }
@@ -134,8 +158,14 @@ app.post("/upload/uploadFile", upload.single('file'), async (req, res, next) => 
       {
         let hash = await uploadFileToIPFS(req.file.filename);
         const finalHash = hash.slice(0, -1);
-        res.send({ipfsHash:finalHash, url:"https://ipfs.io/ipfs/"+finalHash})
-        next();
+        if(req.body.pin == true)
+        {
+          let pinned = await PinToLocalIPFS(finalHash)
+          res.send({ipfsHash:finalHash, url:"https://ipfs.io/ipfs/"+finalHash, pin: pinned})
+        }else{
+          let nonpined = await removePinIPFS(finalHash);
+          res.send({ipfsHash:finalHash, url:"https://ipfs.io/ipfs/"+finalHash, pin: nonpined})
+        }
       }else{
         res.send({error: "Wrong format!"})
       }

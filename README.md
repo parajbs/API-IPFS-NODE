@@ -107,7 +107,8 @@ Body: ``` {
 
 API response: ```{
     "ipfshash":<'file hash'>,
-    "url":"<'url of IPFS'>"
+    "url":"<'url of IPFS'>",
+    "pin":true or false
 }```
 
 **Example Progrma Using Axios:**
@@ -122,7 +123,8 @@ async function UploadJsonData(){
             data:{
                 name:"First NFT to IPFS",
                 Description:"This is a first ipfs cloud test"
-            }
+            },
+            pin: true
         },
           headers: {
               publickey: 'DEFAULT',
@@ -144,13 +146,14 @@ Header: ``` publickey: <'your publick key'>, privatekey:<'your privatekey'>```
 
 API response: ```{
     "ipfshash":<'file hash'>,
-    "url":"<'url of IPFS'>"
+    "url":"<'url of IPFS'>",
+    "pin":true or false
 }```
 
 **Example Progrma Using Axios:**
 
 ``` javascript 
-async function UploadJsonData(){
+async function UploadFile(){
     const image = fs.createReadStream("yourfile.png")
     async function UploadData(){
         let datas = new FormData();
@@ -161,6 +164,8 @@ async function UploadJsonData(){
             headers: {
                 publickey: 'DEFAULT',
                 privatekey: 'DEFAULT123'
+            },data:{
+              pin: true
             }
         },).then(suc=>{
             console.log(suc)

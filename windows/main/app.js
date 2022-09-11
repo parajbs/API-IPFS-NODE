@@ -1,7 +1,7 @@
 const axios = require("axios").default
 const FormData = require('form-data');
 const fs = require("fs");
-// const image = fs.createReadStream("logo.png")
+const image = fs.createReadStream("yourfilename") // your file name here
 
 
 async function UploadData(){
@@ -12,8 +12,8 @@ async function UploadData(){
     let re = axios.post("http://localhost:4000/upload/uploadFile", datas,
     {
         headers: {
-            publickey: 'DEFAULT',
-            privatekey: 'DEFAULT123'
+            publickey: 'd83db8c2d6ddcef696484def752b6947',
+            privatekey: 'K3JR2CQP2REVNITKINXBALSNCKFA'
         }
     },).then(suc=>{
         console.log(suc)
@@ -29,7 +29,8 @@ async function UploadJsonData(){
             data:{
                 name:"First NFT to IPFS",
                 Description:"This is a first ipfs cloud test"
-            }
+            },
+            pin: true
         },
         headers: {
             publickey: 'DEFAULT',
@@ -56,4 +57,4 @@ async function GetJsonData(){
     })
 }
 
-GetJsonData();
+UploadData();
