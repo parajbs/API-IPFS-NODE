@@ -55,8 +55,6 @@ async function IPFSstart() {
 async function uploadJSONToIPFS(filename, jsondata) {
     fs.writeFile(jsonloc + filename+ ".json", JSON.stringify(jsondata), (err) => {
         if (err) throw err;
-    
-        console.log("\nDone writing"); // Success
       });
       try{
         const hash = await execProm("ipfs add "+jsonloc+filename + ".json --quiet")

@@ -85,7 +85,7 @@ API response: ```{
     "ipfshash":<'file hash'>
 }```
 
-**Example Progrma Using Axios**
+**Example Progrma Using Axios:**
 
 ``` javascript 
 async function UploadJsonData(){
@@ -123,7 +123,7 @@ API response: ```{
     "ipfshash":<'file hash'>
 }```
 
-**Example Progrma Using Axios**
+**Example Progrma Using Axios:**
 
 ``` javascript 
 async function UploadJsonData(){
