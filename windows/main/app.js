@@ -1,7 +1,7 @@
 const axios = require("axios").default
 const FormData = require('form-data');
 const fs = require("fs");
-const image = fs.createReadStream("logo.png")
+// const image = fs.createReadStream("logo.png")
 
 
 async function UploadData(){
@@ -40,4 +40,20 @@ async function UploadJsonData(){
     })
 }
 
-UploadJsonData();
+async function GetJsonData(){
+    axios({
+        method: 'get', //you can set what request you want to be
+        url: 'http://localhost:4000/get/getJson',
+        data: {
+            hash:"QmWLEw6oHb4hensFnAXFAphAv48sdCawjyhJyMKKDLmtfx"
+        },
+        headers: {
+            publickey: 'DEFAULT',
+            privatekey: 'DEFAULT123'
+        }
+    }).then(suc=>{
+        console.log(suc);
+    })
+}
+
+GetJsonData();
