@@ -60,8 +60,8 @@ async function uploadJSONToIPFS(filename, jsondata) {
       });
       try{
         const hash = await execProm("ipfs add "+jsonloc+filename + ".json --quiet")
-        console.log("****************************Uploading File"+filename+".json"+"**************************")
-        console.log("\nHash Code is:"+hash);
+        console.log("****************************Uploading File "+filename+".json"+"**************************")
+        console.log("\nHash Code is: "+hash.stdout);
         console.log("*******************************************************************************************\n\n")
         return hash.stdout;
       }catch(err)
@@ -73,7 +73,7 @@ async function uploadJSONToIPFS(filename, jsondata) {
 async function uploadFileToIPFS(filename) {
     try{
       const hash = await execProm("ipfs add "+fileloc+filename + " --quiet")
-      console.log("\nHash Code is:"+hash.stdout);
+      console.log("\nHash Code is: "+hash.stdout);
       console.log("*******************************************************************************************\n\n")
       return hash.stdout;
     }catch(err)
@@ -99,7 +99,7 @@ async function getJsonData(hash) {
   return JSON.parse(data.stdout);
 }
 
-app.get("/upload/uploadJson", async (req, res, next) => {
+app.post("/upload/uploadJson", async (req, res, next) => {
   let auth = checkAuth(req.headers["publickey"], req.headers["privatekey"])
   if(auth)
   {
@@ -108,6 +108,7 @@ app.get("/upload/uploadJson", async (req, res, next) => {
     res.send({ipfsHash:finalHash})
   }else{
     res.send({error: "Wrong Private Key. Please check your Keys Set!"})
+    console.log("Wrong Private Key. Please check your Keys Set!")
     console.log("*******************************************************************************************\n\n")
   }
   next();
@@ -117,8 +118,11 @@ app.post("/upload/uploadFile", upload.single('file'), async (req, res, next) => 
   let auth = checkAuth(req.headers["publickey"], req.headers["privatekey"])
   if(!auth)
   {
+    console.log(req.headers)
     res.send({error: "Wrong Private Key. Please check your Keys Set!"})
-    fs.unlinkSync(fileloc+req.file.filename);
+    if(fs.existsSync(fileloc+req.file.filename)){
+      fs.unlinkSync(fileloc+req.file.filename);
+    }
     console.log("Wrong Keys Set! Please Check in apikey.json!");
     console.log("\n*******************************************************************************************\n")
     next();
