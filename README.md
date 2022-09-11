@@ -11,7 +11,8 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How To Install</a> •
+  <a href="#how-to-install">How To Install</a> •
+  <a href="#how-to-use">How To Use</a> •
   <a href="#download">Download</a> •
   <a href="#related">Related</a> •
 </p>
