@@ -27,7 +27,6 @@ const storage = multer.diskStorage({
     cb(null, "upload/files")
   },
   filename:async (req, file, cb)=>{
-    console.log("****************************Uploading File "+Date.now()+path.extname(file.originalname)+"**************************\n")
     let nameFile = Date.now()+path.extname(file.originalname);
     cb(null, nameFile)
   }
@@ -50,29 +49,28 @@ async function IPFSstart() {
   console.log("Your Public Key  :"+apikey.PUBLICKEY)
   console.log("Your Private Key :"+apikey.PRIVATEKEY)
   console.log("\n*******************************************************************************************\n")
+  console.log("Server is Running on Port: "+port)
 }
 
 async function uploadJSONToIPFS(filename, jsondata) {
-    fs.writeFile(jsonloc + filename+ ".json", JSON.stringify(jsondata), (err) => {
-        if (err) throw err;
-      });
-      try{
-        const hash = await execProm("ipfs add "+jsonloc+filename + ".json --quiet")
-        console.log("****************************Uploading File "+filename+".json"+"**************************")
-        console.log("\nHash Code is: "+hash.stdout);
-        console.log("*******************************************************************************************\n\n")
-        return hash.stdout;
-      }catch(err)
-      {
-        console.log(err)
-      }
+    let nameFile = Date.now()+path.extname(filename);
+    fs.writeFile(jsonloc + nameFile+ ".json", JSON.stringify(jsondata), (err) => {
+        if (err) console.log(err);
+    });
+    try{
+      const hash = await execProm("ipfs add "+jsonloc+nameFile + ".json --quiet")
+      bannerconsole(nameFile+".json", hash.stdout);
+      return hash.stdout;
+    }catch(err)
+    {
+      console.log(err)
+    }
 }
 
 async function uploadFileToIPFS(filename) {
     try{
       const hash = await execProm("ipfs add "+fileloc+filename + " --quiet")
-      console.log("\nHash Code is: "+hash.stdout);
-      console.log("*******************************************************************************************\n\n")
+      bannerconsole(filename, hash.stdout);
       return hash.stdout;
     }catch(err)
     {
@@ -92,6 +90,13 @@ function checkAuth(pubkey, privkey){
   }
 }
 
+function bannerconsole(filename, hash){
+  console.log("****************************Uploading File "+filename+" To IPFS**************************\n")
+  console.log("\nFile Name: "+filename);
+  console.log("IPFS Hash: "+hash)
+  console.log("IPFS URL:  "+"https://ipfs.io/ipfs/"+hash);
+}
+
 async function getJsonData(hash) {
   const data = await execProm("ipfs cat "+hash)
   return JSON.parse(data.stdout);
@@ -103,38 +108,34 @@ app.post("/upload/uploadJson", async (req, res, next) => {
   {
     let hash = await uploadJSONToIPFS(req.body.name, req.body.data)
     const finalHash = hash.slice(0, -1);
-    res.send({ipfsHash:finalHash})
+    res.send({ipfsHash:finalHash, url:"https://ipfs.io/ipfs/"+finalHash})
   }else{
     res.send({error: "Wrong Private Key. Please check your Keys Set!"})
-    console.log("Wrong Private Key. Please check your Keys Set!")
-    console.log("*******************************************************************************************\n\n")
   }
   next();
 });
 
 app.post("/upload/uploadFile", upload.single('file'), async (req, res, next) => {
-  let auth = checkAuth(req.headers["publickey"], req.headers["privatekey"])
-  if(!auth)
-  {
-    console.log(req.headers)
-    res.send({error: "Wrong Private Key. Please check your Keys Set!"})
-    if(fs.existsSync(fileloc+req.file.filename)){
-      fs.unlinkSync(fileloc+req.file.filename);
-    }
-    console.log("Wrong Keys Set! Please Check in apikey.json!");
-    console.log("\n*******************************************************************************************\n")
-    next();
-  }else{
-    if(req.file.mimetype != "application/x-msdownload")
+    let auth = checkAuth(req.headers["publickey"], req.headers["privatekey"])
+    if(!auth)
     {
-      let hash = await uploadFileToIPFS(req.file.filename);
-      const finalHash = hash.slice(0, -1);
-      res.send({ipfsHash:finalHash})
-      next();
+      console.log(req.headers)
+      res.send({error: "Wrong Private Key. Please check your Keys Set!"})
+      if(fs.existsSync(fileloc+req.file.filename)){
+        fs.unlinkSync(fileloc+req.file.filename);
+      }
     }else{
-      res.send({error: "Wrong format!"})
-    }
+      if(req.file.mimetype != "application/x-msdownload")
+      {
+        let hash = await uploadFileToIPFS(req.file.filename);
+        const finalHash = hash.slice(0, -1);
+        res.send({ipfsHash:finalHash, url:"https://ipfs.io/ipfs/"+finalHash})
+        next();
+      }else{
+        res.send({error: "Wrong format!"})
+      }
   }
+  next();
 });
 
 app.get("/get/getJson", async (req, res, next) => {
@@ -183,7 +184,6 @@ app.listen(port, () => {
     generateAPIKEY();
   }else
   {
-    console.log(`server is UP at ${port}`);
     IPFSstart();
     console.log("********************************Started the Server***************************")
   }
