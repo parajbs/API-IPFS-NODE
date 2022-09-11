@@ -99,7 +99,12 @@ function bannerconsole(filename, hash){
 
 async function getJsonData(hash) {
   const data = await execProm("ipfs cat "+hash)
-  return JSON.parse(data.stdout);
+  try{
+    let jsondata = JSON.parse(data.stdout);
+    return jsondata;
+  }catch(err){
+    return false;
+  }
 }
 
 app.post("/upload/uploadJson", async (req, res, next) => {
@@ -143,7 +148,12 @@ app.get("/get/getJson", async (req, res, next) => {
   if(auth==true)
   {
     let data = await getJsonData(req.body.hash)
-    res.send({ data: data});
+    if(data == false)
+    {
+      res.send({erro:"Requested data is not a JSON data."})
+    }else{
+      res.send({ data: data});
+    }
   }else{
     res.send({error: "Wrong Private Key. Please check your Keys Set!"})
   }
