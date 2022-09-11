@@ -53,6 +53,30 @@ $ node index.js --genApiAlone
 $ node index.js
 ```
 
+Also comes with windows Executable file. If you are using executable file:
+
+```batch
+
+$ $ git clone https://github.com/Pr0fe5s0r/API-IPFS-NODE
+
+# Go into the API-IPFS-NODE repository
+$ cd API-IPFS-NODE
+
+# Go into the windows/main
+$ cd windows/main/executableFile
+
+# Run the exe file generate key's
+$ ./win.exe --genApiAlone
+
+# start the server
+$ ./win.exe
+
+```
+
+<br>
+<br>
+<br>
+
 > **Note**
 > Soon linux version of Cloud IPFS will be uploaded!!
 
