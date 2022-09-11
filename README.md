@@ -68,7 +68,7 @@ $ cd windows/main/executableFile
 # Run the exe file generate key's
 $ ./win.exe --genApiAlone
 
-# start the server
+# run the server
 $ ./win.exe
 
 ```
