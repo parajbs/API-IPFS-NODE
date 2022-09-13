@@ -144,7 +144,8 @@ app.post("/upload/uploadJson", async (req, res, next) => {
   next();
 });
 
-app.post("/upload/uploadFile", upload.single('file'), async (req, res, next) => {
+app.post("/upload/uploadFile", upload.single('file'),
+async (req, res, next) => {
     let auth = checkAuth(req.headers["publickey"], req.headers["privatekey"])
     if(!auth)
     {

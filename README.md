@@ -77,9 +77,6 @@ $ ./win.exe
 <br>
 <br>
 
-> **Note**
-> Soon linux version of Cloud IPFS will be uploaded!!
-
 
 
 ## How To Use

@@ -1,7 +1,7 @@
 const axios = require("axios").default
 const FormData = require('form-data');
 const fs = require("fs");
-const image = fs.createReadStream("yourfilename") // your file name here
+const image = fs.createReadStream("1.jpeg") // your file name here
 
 
 async function UploadData(){
@@ -9,11 +9,11 @@ async function UploadData(){
     let datas = new FormData();
     datas.append('file', image);
     console.log(datas);
-    let re = axios.post("http://localhost:4000/upload/uploadFile", datas,
+    let re = axios.post("http://127.0.0.1:4000/upload/uploadFile", datas,
     {
         headers: {
-            publickey: 'd83db8c2d6ddcef696484def752b6947',
-            privatekey: 'K3JR2CQP2REVNITKINXBALSNCKFA'
+            publickey: 'DEFAULT',
+            privatekey: 'DEFAULT123'
         }
     },).then(suc=>{
         console.log(suc)
