@@ -1,7 +1,7 @@
 
 <h1 align="center">
   <br>
-  <img src="https://raw.githubusercontent.com/Pr0fe5s0r/API-IPFS-NODE/main/images/logo.png" alt="CloudIPFS" width="200">
+  <img src="" alt="CloudIPFS" width="200">
   <br>
   Cloud IPFS
   <br>
@@ -38,7 +38,7 @@ To run this application, you'll need [Git](https://git-scm.com), [GoLang](https:
 WINDOWS:
 ```bash
 # Clone this repository
-$ git clone https://github.com/Pr0fe5s0r/API-IPFS-NODE
+$ git clone this repo
 
 # Go into the API-IPFS-NODE repository
 $ cd API-IPFS-NODE
@@ -57,7 +57,7 @@ Also comes with windows Executable file. If you are using executable file:
 
 ```batch
 
-$ $ git clone https://github.com/Pr0fe5s0r/API-IPFS-NODE
+$ $ git clone this repo
 
 # Go into the API-IPFS-NODE repository
 $ cd API-IPFS-NODE
@@ -208,8 +208,3 @@ async function GetJsonData(){
 }
 ```
 
-# Donate:
-
-**ETHEREUM ADDRESS: 0xD4E4cbd23a0D2a4B4E4a23bb5CbED205d72f67EC**
-
-![Ethereum Address](images/wallet.png)
